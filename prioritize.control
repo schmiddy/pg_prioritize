@@ -1,0 +1,5 @@
+# kmean extension
+comment = 'get and set the priority of PostgreSQL backends'
+default_version = '1.0.0'
+module_pathname = '$libdir/prioritize'
+relocatable = true
