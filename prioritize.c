@@ -1,19 +1,23 @@
+#include "postgres.h"
+
 #include <unistd.h>
 #include <sys/resource.h>
-#include "postgres.h"
+
 #include "fmgr.h"
+#include "miscadmin.h"
 #include "storage/proc.h"
 #include "storage/procarray.h"
 
 
-#ifdef PG_MODULE_MAGIC
-PG_MODULE_MAGIC;
-#endif
 
+
+PG_MODULE_MAGIC;
 
 PG_FUNCTION_INFO_V1(set_backend_priority);
 PG_FUNCTION_INFO_V1(get_backend_priority);
 
+extern Datum get_backend_priority(PG_FUNCTION_ARGS);
+extern Datum set_backend_priority(PG_FUNCTION_ARGS);
 
 Datum
 get_backend_priority(PG_FUNCTION_ARGS)
