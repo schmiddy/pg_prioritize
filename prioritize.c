@@ -9,8 +9,6 @@
 #include "storage/procarray.h"
 
 
-
-
 PG_MODULE_MAGIC;
 
 PG_FUNCTION_INFO_V1(set_backend_priority);

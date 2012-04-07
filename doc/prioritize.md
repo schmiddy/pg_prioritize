@@ -34,6 +34,17 @@ History
   * Initial version
 
 
+
+Support
+-------
+
+This library is stored in an open [GitHub
+repository](https://github.com/schmiddy/pg_prioritize).
+Feel free to fork and contribute! Please file bug reports
+via [GitHub Issues](http://github.com/schmiddy/pg_prioritize/issues/).
+
+
+
 Author
 ------
 [Josh Kupershmidt](mailto:schmiddy@gmail.com)
@@ -57,7 +68,7 @@ indirect, special, incidental, or consequential damages, including
 lost profits, arising out of the use of this software and its documentation,
 even if Josh Kupershmidt has been advised of the possibility of such damage.
 
-Josh Kupershmidt specifically disclaim any warranties,
+Josh Kupershmidt specifically disclaims any warranties,
 including, but not limited to, the implied warranties of merchantability and 
 fitness for a particular purpose. The software provided hereunder is on an "as 
 is" basis, and Josh Kupershmidt has no obligations to provide maintenance,
