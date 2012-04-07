@@ -2,15 +2,15 @@
    "name":"prioritize",
    "abstract":"get/set priorities of PostgreSQL backends",
    "description":"This module provides methods to get and set the priorities of PostgreSQL backends.",
-   "version":"1.0.0",
+   "version":"1.0.1",
    "maintainer":"Josh Kupershmidt <schmiddy@gmail.com>",
    "license":"postgresql",
    "provides":{
-      "get_backend_priority":{
-         "abstract":"get the current priority of the given backend",
-         "version":"1.0.0",
+      "prioritize":{
+         "abstract":"get and set the priorities of backends",
+         "version":"1.0.1",
          "file":"prioritize.sql",
-         "docfile":"doc/README"
+         "docfile":"doc/prioritize.md"
       }
    },
    "resources":{
