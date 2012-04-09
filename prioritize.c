@@ -1,6 +1,7 @@
 #include "postgres.h"
 
 #include <unistd.h>
+#include <errno.h>
 #include <sys/resource.h>
 
 #include "fmgr.h"
@@ -22,6 +23,8 @@ get_backend_priority(PG_FUNCTION_ARGS)
 {
     int pid = PG_GETARG_INT32(0);
     int priority;
+    int save_errno = errno;
+
 
     if (!IsBackendPid(pid)) {
         ereport(WARNING,
@@ -29,7 +32,20 @@ get_backend_priority(PG_FUNCTION_ARGS)
 	PG_RETURN_NULL();
     }
 
+    errno = 0;
     priority = getpriority(PRIO_PROCESS, pid);
+    if (priority == -1) {
+	/* We need to check errno to determine whether an error has occurred
+	   or if the priority of the process is just '-1'.
+	*/
+	if (errno == ESRCH || errno == EINVAL) {
+	    errno = save_errno;
+	    ereport(ERROR,
+		    (errcode(ERRCODE_SYSTEM_ERROR),
+		     (errmsg("getpriority() could not find the requested backend"))));
+	}
+    }
+    errno = save_errno;
     PG_RETURN_INT32(priority);
 }
 
@@ -44,12 +60,18 @@ Datum
 set_backend_priority(PG_FUNCTION_ARGS)
 {
     PGPROC *proc;
-    int pid      = PG_GETARG_INT32(0);
-    int prio     = PG_GETARG_INT32(1);
-    bool success = true;
-    int old_prio;
+    int pid        = PG_GETARG_INT32(0);
+    int prio       = PG_GETARG_INT32(1);
+    int save_errno = errno;
+    bool success   = true;
 
-    if (!superuser()) {
+    if (pid == MyProcPid) {
+	/* Quick check: if we are setting the priority of our own backend,
+	 * skip permissions checks and chekcs of whether 'pid' is a valid
+	 * backend.
+	 */
+    }
+    else if (!superuser()) {
 	/*
          * Since the user is not superuser, check for matching roles. Trust
          * that BackendPidGetProc will return NULL if the pid isn't valid,
@@ -89,28 +111,27 @@ set_backend_priority(PG_FUNCTION_ARGS)
     }
 
     if (success) {
-	old_prio = getpriority(PRIO_PROCESS, pid);
-	if (old_prio > prio)
-	{
-	    ereport(WARNING,
-		    (errmsg("Not possible to lower a process's priority (currently %d)", old_prio)));
-	    success = false;
-	}
-	else if (old_prio == prio) {
+	errno = 0;
+	if (setpriority(PRIO_PROCESS, pid, prio) == 0) {
 	    ereport(NOTICE,
-		    (errmsg("Priority of backend %d remaining at %d", pid, prio)));
-	    success = false;
+		    (errmsg("Set priority of backend %d to %d", pid, prio)));
 	}
-	else if (setpriority(PRIO_PROCESS, pid, prio) == 0)
-		ereport(NOTICE,
-			(errmsg("Changed priority of backend %d from %d to %d", pid,
-				old_prio, getpriority(PRIO_PROCESS, pid))));
 	else {
-	    ereport(WARNING,
-		    (errmsg("Error setting priority of %d", pid)));
-	    success = false;
+	    if (errno == ESRCH || errno == EINVAL) {
+		errno = save_errno;
+		ereport(ERROR,
+			(errcode(ERRCODE_SYSTEM_ERROR),
+			 (errmsg("setpriority(): could not find the requested backend"))));
+	    }
+	    else {
+		/* Assume EPERM or EACCES */
+		ereport(WARNING,
+			(errmsg("setpriority(): permission denied")));
+		success = false;
+	    }
 	}
     }
 
+    errno = save_errno;
     PG_RETURN_BOOL(success);
 }
