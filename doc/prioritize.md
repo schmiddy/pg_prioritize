@@ -1,4 +1,4 @@
-prioritize 1.0.0
+prioritize 1.0.1
 ============
 
 Synopsis
@@ -30,6 +30,9 @@ values downwards.
 
 History
 -------
+### v1.0.1 (2012-04-07)
+  * Few fixes to the docs and build
+
 ### v1.0.0 (2012-04-05)
   * Initial version
 
