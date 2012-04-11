@@ -10,7 +10,7 @@
          "abstract":"get and set the priorities of backends",
          "version":"1.0.1",
          "file":"prioritize.sql",
-         "docfile":"doc/prioritize.md"
+         "docfile":"README.md"
       }
    },
    "resources":{
