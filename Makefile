@@ -1,13 +1,11 @@
-# contrib/prioritize/Makefile
-
 MODULES = prioritize
 EXTENSION = $(MODULES)
-EXTVERSION = 1.0.0
+EXTVERSION = 1.0
 EXTSQL = $(MODULES)--$(EXTVERSION).sql
 
 DATA_built = $(MODULES).sql
 DATA = uninstall_$(MODULES).sql
-DOCS = doc/$(MODULES).md
+DOCS = README.md
 REGRESS = $(MODULES)
 
 SQL_IN = $(MODULES).sql.in
