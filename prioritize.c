@@ -41,7 +41,7 @@ get_backend_priority(PG_FUNCTION_ARGS)
 	if (errno == ESRCH || errno == EINVAL) {
 	    errno = save_errno;
 	    ereport(ERROR,
-		    (errcode(ERRCODE_SYSTEM_ERROR),
+		    (errcode(ERRCODE_IO_ERROR),
 		     (errmsg("getpriority() could not find the requested backend"))));
 	}
     }
@@ -120,7 +120,7 @@ set_backend_priority(PG_FUNCTION_ARGS)
 	    if (errno == ESRCH || errno == EINVAL) {
 		errno = save_errno;
 		ereport(ERROR,
-			(errcode(ERRCODE_SYSTEM_ERROR),
+			(errcode(ERRCODE_IO_ERROR),
 			 (errmsg("setpriority(): could not find the requested backend"))));
 	    }
 	    else {
