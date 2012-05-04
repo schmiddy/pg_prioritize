@@ -19,7 +19,7 @@ Description
 -----------
 This module allows users to query and set the priority of PostgreSQL
 backend processes. The priority values are used by getpriority()
-and setpriority(), which you may be familiar with from the `nice' or `renice'
+and setpriority(), which you may be familiar with from the `nice` or `renice`
 programs.
 
 
