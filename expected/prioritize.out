@@ -1,0 +1,42 @@
+CREATE EXTENSION prioritize;
+SELECT get_backend_priority(pg_backend_pid());
+ get_backend_priority 
+----------------------
+                    0
+(1 row)
+
+SELECT set_backend_priority(pg_backend_pid(), -5);
+WARNING:  setpriority(): permission denied
+ set_backend_priority 
+----------------------
+ f
+(1 row)
+
+SET client_min_messages = warning;
+SELECT set_backend_priority(pg_backend_pid(), 5);
+ set_backend_priority 
+----------------------
+ t
+(1 row)
+
+RESET client_min_messages;
+SELECT get_backend_priority(pg_backend_pid());
+ get_backend_priority 
+----------------------
+                    5
+(1 row)
+
+SELECT get_backend_priority(1);
+WARNING:  PID 1 is not a PostgreSQL server process
+ get_backend_priority 
+----------------------
+                     
+(1 row)
+
+SELECT set_backend_priority(1, 5);
+WARNING:  PID 1 is not a PostgreSQL server process
+ set_backend_priority 
+----------------------
+ f
+(1 row)
+

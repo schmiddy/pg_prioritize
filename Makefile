@@ -9,7 +9,6 @@ DOCS = README.md
 REGRESS = $(MODULES)
 
 SQL_IN = $(MODULES).sql.in
-EXTRA_CLEAN = sql/$(MODULES).sql expected/$(MODULES).out
 
 USE_EXTENSION = $(shell pg_config --version | grep -qE " 8\.|9\.0" && echo no || echo yes)
 
